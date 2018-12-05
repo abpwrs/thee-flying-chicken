@@ -1,0 +1,6 @@
+# ignore everything in this file
+*
+# only track compressed files
+!*.tar.gz
+# and track the shell files
+!*.sh
