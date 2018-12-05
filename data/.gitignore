@@ -1,6 +1,5 @@
-# ignore everything in this file
+# ignore everything in this directory
 *
-# only track compressed files
+# only track compressed files and .gitignore
 !*.tar.gz
-# and track the shell files
-!*.sh
+!.gitignore
