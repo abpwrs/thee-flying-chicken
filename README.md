@@ -13,6 +13,13 @@ Then activate the environment
 conda activate tfc
 ```
 
+## Project Configuration
+main project paths will be stored in the config.json file, which is part of the git ignore, but can be generated via the following command:
+```bash
+cd thee-flying-chicken # you need to run this command from thee-flying-chicken directory
+python scripts/py/reset_config.py
+```
+
 
 
 
