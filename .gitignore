@@ -384,3 +384,6 @@ modules.xml
 .history
 
 # End of https://www.gitignore.io/api/mean,django,python,pycharm+all,visualstudiocode
+
+# adding the config.json to .gitignore
+config.json
