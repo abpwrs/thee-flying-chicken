@@ -10,6 +10,8 @@ from nltk.classify import ClassifierI
 from statistics import mode
 from nltk.tokenize import word_tokenize
 
+### Rough template for FIRST training of the classifier module example ###
+### After they are pickled, use sentiment_mod ###
 
 
 class VoteClassifier(ClassifierI):
@@ -32,7 +34,8 @@ class VoteClassifier(ClassifierI):
         choice_votes = votes.count(mode(votes))
         conf = choice_votes / len(votes)
         return conf
-    
+
+# or corpora movie reviews/ product reviews/ tweets pos and neg   
 short_pos = open("short_reviews/positive.txt","r").read()
 short_neg = open("short_reviews/negative.txt","r").read()
 
