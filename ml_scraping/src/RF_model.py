@@ -3,6 +3,7 @@ import glob
 import os
 import random
 import numpy as np 
+import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
@@ -48,14 +49,14 @@ allowed_word_types = ["J"]
 lemmatizer = WordNetLemmatizer()
 
 for r in negShort.split("\n"):
-    documents.append( (r, "neg") )
+    documents.append( (r, 1) )
     words = word_tokenize(r)
     pos = nltk.pos_tag(words)
     for w in pos:
         if w[1][0] in allowed_word_types:
             all_words.append(lemmatizer.lemmatize( w[0].lower()) )
 for r in posShort.split("\n"):
-    documents.append( (r, "pos") )
+    documents.append( (r, 0) )
     words = word_tokenize(r)
     pos = nltk.pos_tag(words)
     for w in pos:
@@ -65,7 +66,7 @@ for r in posShort.split("\n"):
 #pos_reviews = [r for r in pos.split("\n")]
 
 for r in negMovie:
-    documents.append( (r, "neg") )
+    documents.append( (r, 1) )
     words = word_tokenize(r)
     pos = nltk.pos_tag(words)
     for w in pos:
@@ -73,7 +74,7 @@ for r in negMovie:
             all_words.append(lemmatizer.lemmatize( w[0].lower()) )
 
 for r in posMovie:
-    documents.append( (r, "pos") )
+    documents.append( (r, 0) )
     words = word_tokenize(r)
     pos = nltk.pos_tag(words)
     for w in pos:
@@ -124,14 +125,15 @@ add(arr_two)
 # number of unique words
 all_words = nltk.FreqDist(all_words)
 word_features = list( all_words.keys() )[:len(all_words.keys())//5 ]
-# save_word_features = open("pickled_algos/word_features5k.pickle","wb")
+# save_word_features = open(os.path.join(DATA_DIR, "picked_algos", "WordFeatures.pickle"),"wb")
 # pickle.dump(word_features, save_word_features)
 # save_word_features.close()
 def find_features(document):
     words = word_tokenize(document)
+    lem_words = [lemmatizer.lemmatize(w) for w in words]
     features = {}
     for w in word_features:
-        features[lemmatizer.lemmatize(w)] = (w in words)
+        features[w] = (w in lem_words)
 
     return features
 
@@ -142,20 +144,29 @@ print(len(featuresets))
 testing_set = featuresets[len(featuresets)//100:]
 training_set = featuresets[:len(featuresets)//100]
 
+x_train = [ [i[0][w] for w in word_features] for i in training_set]  
+y_train = [i[1] for i in training_set]
+
+x_test = [ [i[0][w] for w in word_features] for i in training_set]  
+y_test = [i[1] for i in testing_set]
+
 
 # train RF
 
 # train_test_spit --> https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
-#clf = RandomForestClassifier()
-#clf.fit(x_train, y_train)
-RandomForestClassifier = SklearnClassifier(RandomForestClassifier())
-RandomForestClassifier.train(training_set)
-print("Random Forest classifier accuracy percent:", (nltk.classify.accuracy(RandomForestClassifier, testing_set))*100)
-# save_classifier = open("os.path.join(DATA_DIR, "picked_algos", "RandomForestClassifier.pickle")","wb")
-# pickle.dump(BernoulliNB_classifier, save_classifier)
-# save_classifier.close()
+clf = RandomForestClassifier(n_estimators=100, n_jobs=-1, verbose=1)
+clf.fit(x_train, y_train)
+# RandomForestClassifier = SklearnClassifier(RandomForestClassifier())
+# RandomForestClassifier.train(training_set)
+# print("Random Forest classifier accuracy percent:", (nltk.classify.accuracy(RandomForestClassifier, testing_set))*100)
 
-# print(classification_report(y_test, clf.predict(x_test)))
+
+print(classification_report(y_test, clf.predict(x_test)))
+
+save_classifier = open(os.path.join(DATA_DIR, "picked_algos", "RandomForestClassifier.pickle"),"wb")
+pickle.dump(clf, save_classifier)
+save_classifier.close()
+
 
 # Evaluate RF
 
