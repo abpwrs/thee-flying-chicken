@@ -1,3 +1,8 @@
 {
-    "python.pythonPath": "/Users/AlexPowers/miniconda3/envs/tfc/bin/python"
+<<<<<<< Updated upstream
+    "python.pythonPath": "/Users/danielconway/miniconda3/envs/tfc/bin/python"
+=======
+    "python.pythonPath": "C:\\Users\\Daniel\\Anaconda3\\python.exe",
+    "git.ignoreLimitWarning": true
+>>>>>>> Stashed changes
 }
