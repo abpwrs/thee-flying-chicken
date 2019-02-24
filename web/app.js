@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var http = require('http');
 // Project specific routes
 // ///////////////////////////////
 var indexRouter = require('./routes/index');
@@ -30,14 +30,23 @@ app.disable('x-powered-by');
 var mongoose = require('mongoose');
 
 //Set up default mongoose connection
-var mongoDB = 'mongodb://127.0.0.1/tfc';
-mongoose.connect(mongoDB);
-// Get Mongoose to use the global promise library
-mongoose.Promise = global.Promise;
-//Get the default connection
-var db = mongoose.connection;
-//Bind connection to error event (to get notification of connection errors)
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+const MongoClient = require('mongodb').MongoClient;
+
+const dbName = process.env.NODE_ENV === 'dev' ? 'database-test' : 'database';
+const url = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${dbName}:27017?authMechanism=SCRAM-SHA-1&authSource=admin`;
+const options = {
+    useNewUrlParser: true,
+    reconnectTries: 60,
+    reconnectInterval: 1000
+};
+// var mongoDB = 'mongodb://127.0.0.1/tfc';
+// mongoose.connect(mongoDB);
+// // Get Mongoose to use the global promise library
+// mongoose.Promise = global.Promise;
+// //Get the default connection
+// var db = mongoose.connection;
+// //Bind connection to error event (to get notification of connection errors)
+// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // ///////////////////////////////
 
 
@@ -74,6 +83,19 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-server = app.listen();
+
+const port = process.env.PORT || 80;
+
+MongoClient.connect(url, options, (err, database) => {
+    if (err) {
+        console.log(`FATAL MONGODB CONNECTION ERROR: ${err}:${err.stack}`);
+        process.exit(1)
+    }
+    app.locals.db = database.db('api');
+    app.listen(port, () => {
+        console.log("Listening on port " + port);
+        app.emit('APP_STARTED')
+    })
+});
 
 module.exports = app;

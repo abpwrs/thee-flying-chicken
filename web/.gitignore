@@ -362,3 +362,8 @@ dmypy.json
 .venv/
 
 # End of https://www.gitignore.io/api/node,mean,python,jetbrains+iml
+
+.env
+node_modules/
+data/
+docker/data/
