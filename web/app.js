@@ -7,7 +7,7 @@ var logger = require('morgan');
 // Project specific routes
 // ///////////////////////////////
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/example');
+var exampleRouter = require('./routes/example');
 // ///////////////////////////////
 
 var app = express();
@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Project specific routes
 // ////////////////////////////////
 app.use('/', indexRouter);
-app.use('/example', usersRouter);
+app.use('/example', exampleRouter);
 // ////////////////////////////////
 
 
