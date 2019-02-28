@@ -1,24 +1,34 @@
-version: '3'
+#version: '3'
+#services:
+#  backend:
+#    build:
+#      context: ../
+#      dockerfile: docker/Dockerfile
+#      args:
+#        port: ${PORT}
+#    env_file:
+#      - ../.env
+#    restart: always
+#    ports:
+#      - 3000:3000
+#    environment:
+#      WAIT_HOSTS: database:27017
+#  database:
+#    image: mongo:4.0
+#    env_file:
+#      - ../.env
+#    volumes:
+#      - ".${MONGO_DATA_DIR}:${MONGO_DATA_DIR}"
+#    expose:
+#      - 27017
+#    command: "mongod --smallfiles --logpath=${MONGO_LOG_FILE}"
+
+
+version: "3"
 services:
-  backend:
-    build:
-      context: ../
-      dockerfile: docker/Dockerfile
-      args:
-        port: ${PORT}
-    env_file:
-      - ../.env
-    restart: always
+  mongo:
+    image: "mongo:3-stretch"
+  mongo-express:
+    image: "mongo-express:latest"
     ports:
-      - 3000:3000
-    environment:
-      WAIT_HOSTS: database:27017
-  database:
-    image: mongo:4.0
-    env_file:
-      - ../.env
-    volumes:
-      - ".${MONGO_DATA_DIR}:${MONGO_DATA_DIR}"
-    expose:
-      - 27017
-    command: "mongod --smallfiles --logpath=${MONGO_LOG_FILE}"
+      - "8081:8081"
