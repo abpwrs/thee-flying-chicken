@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, redirect, render_template, url_for, request
 
 from database import db_session, init_db
 from models import User
@@ -30,6 +30,24 @@ def user_index():
     users = User.query.all()
     return render_template('users.html', users=users)
 
+
+@app.route('/users/new', methods=['POST','GET'])
+def users_new():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        new_user = User(name=str(username), email=str(email))
+        db_session.add(new_user)
+        db_session.commit()
+    else:
+        users = User.query.all()
+        return render_template('users.html', users=users)
+
+@app.route('api/scrape', methods=['POST'])
+def scrape():
+    if request.method == 'POST':
+        url = request.form.get('url')
+        pass
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
