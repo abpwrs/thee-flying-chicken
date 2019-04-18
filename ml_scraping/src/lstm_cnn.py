@@ -34,6 +34,13 @@ def save_best_model(epoch, dir_path, num_ext, ext):
 # load the dataset but only keep the top n words, zero the rest
 top_words = 5000
 (X_train, y_train), (X_test, y_test) = imdb.load_data(num_words=top_words)
+print(X_train.shape)
+print(X_train.shape)
+print(X_train.shape)
+print(X_train.shape)
+print(X_train.shape)
+print(imdb.)
+
 
 # truncate and pad input sequences
 max_review_length = 500

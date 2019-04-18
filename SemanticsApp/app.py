@@ -2,6 +2,7 @@ from flask import Flask, redirect, render_template, url_for, request
 
 from database import db_session, init_db
 from models import User
+from internal_api import *
 
 app = Flask(__name__)
 init_db()
@@ -48,6 +49,27 @@ def scrape():
     if request.method == 'POST':
         url = request.form.get('url')
         pass
+
+
+# classification functionality routes
+#####################################
+
+# classify all entities in the text and return as a dictionary
+@app.route('/api/classify/all', methods=['POST', 'GET'])
+def classify_all(req_url):
+    return api_classify_all(api_scrape(req_url))
+
+# classity a single entity and return a single integer representing the classification
+@app.route('/api/classify/entity/<named_entity>', methods=['POST', 'GET'])
+def classify_entity(req_url, named_entity):
+    return api_classify_entity(api_scrape(req_url), named_entity)
+
+
+@app.route('/api/classify/<req_url>/top/<int:j>')
+def classify_top_j(req_url, j):
+    return api_classify_top_j(api_scrape(req_url), j)
+
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):

@@ -1,5 +1,5 @@
 # DB Application
-> Gabe Joy and Alexander Powers
+> Daniel Conway, Gabe Joy and Alexander Powers
 
 ### Setup
 ```bash
