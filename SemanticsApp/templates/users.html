@@ -1,18 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Users</title>
-</head>
-<body>
-{% if users %}
-    <ul>
+{% extends 'layout.html' %}
+{% block title %}Users{% endblock %}
+
+{% block content %}
+    {% if users %}
+        <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
         {% for u in users %}
-            <li>{{ u }}</li>
+            <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.name }}</td>
+            <td>{{ u.email }}</td>
+            </tr>
         {% endfor %}
-    </ul>
-{% else %}
-    <h1>NO USERS</h1>
-{% endif %}
-</body>
-</html>
+        </table>
+    {% else %}
+        <h1>NO USERS</h1>
+    {% endif %}
+{% endblock %}
